@@ -11,7 +11,7 @@ class Range:
         self.provider = provider
 
     def Select(self, foo):
-        return Range([foo(x) for x in self.provider])
+        return Range([foo(x) for x in self.provider()])
 
     def Flatten(self):
         return Range([y for x in self.provider for y in x])
