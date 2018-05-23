@@ -37,19 +37,25 @@ Object::~Object() {
   if (returnValue == 0) {             \
     environments.push_back(environment);
 
-#define CATCH(type, error_ptr)                      \
-  }                                                 \
-  delete environments.back();                       \
-  environments.pop_back();                          \
-  type* error_ptr = dynamic_cast<type*>(exception); \
-  if (error_ptr == nullptr) {                       \
-    THROW(exception);                               \
-  } else {                                          \
-    exception = nullptr;                            \
+#define CATCH(type, name)                     \
+  }                                           \
+  delete environments.back();                 \
+  environments.pop_back();                    \
+  type* ptr = dynamic_cast<type*>(exception); \
+  if (ptr != nullptr) {                       \
+    exception = nullptr;                      \
+    type name = *ptr;
+
+#define CATCH_END                        \
+  }                                      \
+  if (exception != nullptr) {            \
+    std::cout << "THROWED" << std::endl; \
+    system("pause");                     \
+    THROW(exception)                     \
   }
 
 #define THROW(e)                                                \
-  if (e == nullptr || environments.size() == 0) {               \
+  if (exception != nullptr || environments.size() == 0) {       \
     exit(1);                                                    \
   } else {                                                      \
     for (int i = objects.size() - 1; i >= shifts.back(); --i) { \
